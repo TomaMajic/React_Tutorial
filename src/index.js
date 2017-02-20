@@ -5,6 +5,7 @@ import YTSearch from 'youtube-api-search';
 
 import SearchBar from './components/search_bar'; // Cili path ako je nas exportani file
 import VideoList from './components/video_list';
+import VideoDetail from './components/video_detail';
 
 const API_KEY = 'AIzaSyCUiin13ljpY6V8PhrN7HsY5WJJFWg7LyE';
 
@@ -16,10 +17,13 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 	
-	  	this.state = { videos: [] };
+	  	this.state = { 
+	  		videos: [],
+	  		selectedVideo: null
+	  	};
 
-	  	YTSearch({ key: API_KEY, term: 'surfboards' }, (videos) => {
-			this.setState({ videos }); // Ovo je isto ko da pise setState({ videos: videos })
+	  	YTSearch({ key: API_KEY, term: '' }, (videos) => {
+			this.setState({ videos: videos, selectedVideo: videos[0] }); 
 	  	});
 	}
 
@@ -27,7 +31,10 @@ class App extends Component {
   		return (
   			<div>
   				<SearchBar />
-  				<VideoList videos={this.state.videos} />
+  				<VideoDetail video={this.state.selectedVideo}/>
+  				<VideoList 
+  					onVideoSelect={selectedVideo => this.setState({selectedVideo})} // Ko da pise sV: sV
+  					videos={this.state.videos} />
   			</div>
   		);
 	}
